@@ -1,9 +1,18 @@
 package iv_properties
 
 import util.TODO
+import java.util.concurrent.atomic.AtomicBoolean
 
 class LazyProperty(val initializer: () -> Int) {
-    val lazy: Int = todoTask33()
+    private val initialized = AtomicBoolean()
+    private var value: Int = 0
+    val lazy: Int
+        get() {
+            if (initialized.compareAndSet(false, true)) {
+                value = initializer()
+            }
+            return value
+        }
 }
 
 fun todoTask33(): Nothing = TODO(
